@@ -1,33 +1,25 @@
-// O type script ja é esperto suficiente para entender que uma variavel com um valor String, sempre vai ser uma string e virse versa 
+const input = document.querySelector('input');
+const total = localStorage.getItem('total');
 
-let produto = "tablet";
-let valor = 10;
+if (input && total) {
+    input.value = total;
+    calcularGanho(Number(input.value));
+} 
 
-let item = {
-    nome: "carro",
-    portas: 4,
+function calcularGanho(value: number) {
+  const p = document.querySelector('p');
+  p ? p.innerHTML = `${value + 100 - value * 0.2} ` : console.log('error P')
 }
 
-// Inference
-const baratoT: boolean | string = 200 < 400 ? true : "is spance"
-const barato = 200 < 400 ? true : "is spance"
-
-
-function mult(a: number, b: number) {
-    return a * b
+function totalMudou() {
+  if (input) {
+    localStorage.setItem('total', input.value);
+    calcularGanho(Number(input.value));
+  }
 }
 
-const nintendo = {
-    nome: "Nintendo",
-    valor: '1000'
-}
+input ? input.addEventListener('keyup', totalMudou) : console.log('error')
 
+const button = document.querySelector('button');
 
-function transformaPreco(produto: {nome: string, valor: string}) {
-    produto.valor = `R$ ${produto.valor}`;
-    return produto.valor;
-}
-
-const prodNovo = transformaPreco(nintendo);
-
-console.log(prodNovo)
+button?.click()

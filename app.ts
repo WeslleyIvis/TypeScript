@@ -1,25 +1,35 @@
-const input = document.querySelector('input');
-const total = localStorage.getItem('total');
-
-if (input && total) {
-    input.value = total;
-    calcularGanho(Number(input.value));
-} 
-
-function calcularGanho(value: number) {
-  const p = document.querySelector('p');
-  p ? p.innerHTML = `${value + 100 - value * 0.2} ` : console.log('error P')
+async function fetchProduct() {
+    const r = await fetch('https://api.origamid.dev/json/notebook.json');
+    const data = await r.json();
+    console.log(data);
+    showProduct(data);
 }
 
-function totalMudou() {
-  if (input) {
-    localStorage.setItem('total', input.value);
-    calcularGanho(Number(input.value));
-  }
+fetchProduct();
+
+interface Interprise {
+    fundacao: number;
+    nome: string;
+    pais: string;
 }
 
-input ? input.addEventListener('keyup', totalMudou) : console.log('error')
+interface Product {
+    nome: string;
+    preco: number;
+    garantia: string;
+    descricao: string;
+    seguroAcidentes: boolean;
+    empresaFabricante: Interprise;
+    empresaMontadora: Interprise;
+}
 
-const button = document.querySelector('button');
-
-button?.click()
+function showProduct(data: Product) {
+    document.body.innerHTML = `
+        <div>
+            <h2>${data.nome}</h2>
+            <p>${data.preco}</p>
+            <div><h2>${data.empresaFabricante.nome}</h2></div>
+            <div><h2>${data.empresaMontadora.nome}</h2></div>
+        </div>
+    `
+}
